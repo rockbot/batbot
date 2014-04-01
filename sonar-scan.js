@@ -1,7 +1,7 @@
 var five = require('johnny-five'),
     array = require('array-extended'),
     temporal = require('temporal'),
-    ds = require('dualshock-controller')();
+    ds = require('dualshock-controller')({config: 'dualShock3'});
 
 var board, sServo, range, lServo, rServo;
 
@@ -37,26 +37,26 @@ board.on("ready", function () {
       moveSpeed = 0.1,
       moveTimeout = 500;
 
-  ds.on('r2:pressed', function () {
+  ds.on('r2:press', function () {
     console.log(sonar.cm);
   });
-  ds.on('l2:pressed', function () {
+  ds.on('l2:press', function () {
     angle = (range[0] + range[1]) / 2;
     sServo.center();
   });
-  ds.on('dPadLeft:pressed', function () {
+  ds.on('dPadLeft:press', function () {
     angle = angle < range[0] ? range[0] : angle + sonarStep;
     sServo.move(angle);
   });
-  ds.on('dpadRight:pressed', function () {
+  ds.on('dpadRight:press', function () {
     angle = angle > range[1] ? range[1] : angle - sonarStep;
     sServo.move(angle);
   });
-  ds.on('dpadUp:pressed', function () {
+  ds.on('dpadUp:press', function () {
     angle = range[1];
     sServo.max();
   });
-  ds.on('dpadDown:pressed', function () {
+  ds.on('dpadDown:press', function () {
     angle = range[0];
     sServo.min();
   });
@@ -100,7 +100,7 @@ board.on("ready", function () {
     turn (false, false, timeout);
   }
 
-  ds.on('square:pressed', function (data) {
+  ds.on('square:press', function (data) {
     turnLeft();
   });
 
@@ -108,7 +108,7 @@ board.on("ready", function () {
     stop();
   });
 
-  ds.on('circle:pressed', function (data) {
+  ds.on('circle:press', function (data) {
     turnRight();
   });
 
@@ -116,7 +116,7 @@ board.on("ready", function () {
     stop();
   });
 
-  ds.on('triangle:pressed', function () {
+  ds.on('triangle:press', function () {
     goStraight();
   });
 
@@ -124,7 +124,7 @@ board.on("ready", function () {
     stop();
   });
 
-  ds.on('x:pressed', function () {
+  ds.on('x:press', function () {
     goBack();
   });
 
@@ -144,12 +144,12 @@ board.on("ready", function () {
     }, 100);
   }
 
-  ds.on('select:pressed', function () {
+  ds.on('select:press', function () {
     console.log('IN AUTO MODE');
     // scan box
     var minVal = 0;
     var temporalLoop = setInterval(function () {
-      ds.on('r1:pressed', function () {
+      ds.on('r1:press', function () {
         clearInterval(temporalLoop);
       });
 
